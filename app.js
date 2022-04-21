@@ -8,7 +8,7 @@ app.use(express.json())
 
 const msgs = new nanobuffer(50)
 
-const getMessages = ()=> Array.from(msgs).reverse()
+const getMessages = ()=> Array.from(msgs)
 
 msgs.push({
     name:"juls",

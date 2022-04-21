@@ -4,6 +4,7 @@
 
 :root{
     box-sizing: border-box;
+    /* height: 100%; */
 }
 
 *,*::after,*::before{
@@ -40,9 +41,10 @@ body{
     background-color: #eee;
     padding: 2em;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     justify-content:flex-end;
     align-items: flex-end;
+    overflow-y: scroll;
 }
 
 .messageInput{
