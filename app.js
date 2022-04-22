@@ -12,14 +12,13 @@ const getMessages = ()=> Array.from(msgs)
 
 msgs.push({
     name:"juls",
-    text:"hello friends",
+    text:"hello babe",
      date: Date.now()
 })
 
 
 app.get('/poll',(req,res)=>{
-    res.status(200).json({
-      status:'ok',
+    res.status(500).json({
       messages: getMessages()
     })
 })
@@ -28,8 +27,10 @@ app.post('/poll',(req,res)=>{
 
     const {messages} = req.body
 
-    const [name,text] = messages.split(' ')
+    const name = messages.split(' ')[0];
     
+    const text = messages.split(' ').slice(1).join(' ')
+
     msgs.push({
         name,
         text,

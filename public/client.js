@@ -1,5 +1,5 @@
 
-
+let retryCount=0
 const elementDom ={
     "messagesContainer" : document.querySelector('.message__display'),
     "inputElement": document.querySelector("input[type='text']"),
@@ -22,20 +22,9 @@ const render = (data) =>{
 }
 
 
-const receiveMessages = async  ()=>{
-    
-    let data;
-    try{
-        const dataJSON = await fetch('/poll');
-          data = await dataJSON.json()
-        
-        render(data.messages)    
-    }catch(error){
-        console.error("an error ocured in fetchig messages",error)
-    }
-    
-    setTimeout(receiveMessages, INTERVAL)
-}
+
+
+
 
 
 
@@ -61,4 +50,37 @@ if(elementDom.buttonElement){
     
 }
 
-receiveMessages()
+
+
+const receiveMessages = async  ()=>{
+    
+    let data;
+    try{
+        const dataJSON = await fetch('/poll');
+          data = await dataJSON.json()
+        if(dataJSON.status === 500) throw new Error('an error occured on the server')
+        render(data.messages) 
+        retryCount=0   
+    }catch(error){
+        console.error("an error ocured in fetchig messages",error)
+        retryCount++
+    }
+    
+}
+
+
+let timeTillNextAnimation = 0
+
+
+const sendMessages = async(time)=>{
+    
+    if(timeTillNextAnimation<=time){
+        await receiveMessages()
+        timeTillNextAnimation = timeTillNextAnimation  + INTERVAL + retryCount * 5000
+        
+    }
+    requestAnimationFrame(sendMessages)
+}
+
+
+requestAnimationFrame(sendMessages)
